@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include <openssl/hmac.h>
 #include <openssl/md5.h>
 #include <openssl/rand.h>

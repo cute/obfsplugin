@@ -4,12 +4,12 @@
 #include "utils.h"
 #include "obfs.h"
 
-#include "obfsutil.c"
-#include "crc32.c"
-#include "http_simple.c"
-#include "tls1.2_ticket.c"
-#include "verify.c"
-#include "auth.c"
+#include "obfsutil.h"
+#include "crc32.h"
+#include "http_simple.h"
+#include "tls1.2_ticket.h"
+#include "verify.h"
+#include "auth.h"
 
 void * init_data() {
     return malloc(1);
