@@ -1,4 +1,4 @@
-
+#include <stdlib.h>
 #include "verify.h"
 
 static int verify_simple_pack_unit_size = 2000;

@@ -9,6 +9,11 @@
 
 #include <stdint.h>
 #include <unistd.h>
+#include <openssl/rand.h>
+
+#define OBFS_HMAC_SHA1_LEN 10
+#define ONETIMEAUTH_BYTES 10
+#define rand_bytes(a, b) RAND_bytes((a), (b))
 
 typedef struct server_info {
     char host[64];

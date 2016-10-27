@@ -1,4 +1,5 @@
-
+#include <stdlib.h>
+#include <time.h>
 #include "http_simple.h"
 
 static char* g_useragent[] = {

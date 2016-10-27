@@ -1,5 +1,10 @@
-
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
 #include "auth.h"
+#include "obfs.h"
+#include "base64.h"
+#include "algorithm.h"
 
 static int auth_simple_pack_unit_size = 2000;
 typedef int (*hmac_with_key_func)(char *auth, char *msg, int msg_len, uint8_t *auth_key, int key_len);
@@ -232,7 +237,7 @@ int auth_sha1_pack_auth_data(auth_simple_global_data *global, server_info *serve
     memintcopy_lt(outdata + data_offset + 8, global->connection_id);
     memmove(outdata + data_offset + 12, data, datalength);
     char hash[ONETIMEAUTH_BYTES * 2];
-    ss_sha1_hmac(hash, outdata, out_size - OBFS_HMAC_SHA1_LEN, server->iv);
+    ss_sha1_hmac(hash, outdata, out_size - OBFS_HMAC_SHA1_LEN, server->iv, server->iv_len, server->key, server->key_len);
     memcpy(outdata + out_size - OBFS_HMAC_SHA1_LEN, hash, OBFS_HMAC_SHA1_LEN);
     return out_size;
 }
@@ -370,7 +375,7 @@ int auth_sha1_v2_pack_auth_data(auth_simple_global_data *global, server_info *se
     memintcopy_lt(outdata + data_offset + 8, global->connection_id);
     memmove(outdata + data_offset + 12, data, datalength);
     char hash[ONETIMEAUTH_BYTES * 2];
-    ss_sha1_hmac(hash, outdata, out_size - OBFS_HMAC_SHA1_LEN, server->iv);
+    ss_sha1_hmac(hash, outdata, out_size - OBFS_HMAC_SHA1_LEN, server->iv, server->iv_len, server->key, server->key_len);
     memcpy(outdata + out_size - OBFS_HMAC_SHA1_LEN, hash, OBFS_HMAC_SHA1_LEN);
     return out_size;
 }
@@ -528,7 +533,7 @@ int auth_sha1_v4_pack_auth_data(auth_simple_global_data *global, server_info *se
     memintcopy_lt(outdata + data_offset + 8, global->connection_id);
     memmove(outdata + data_offset + 12, data, datalength);
     char hash[ONETIMEAUTH_BYTES * 2];
-    ss_sha1_hmac(hash, outdata, out_size - OBFS_HMAC_SHA1_LEN, server->iv);
+    ss_sha1_hmac(hash, outdata, out_size - OBFS_HMAC_SHA1_LEN, server->iv, server->iv_len, server->key, server->key_len);
     memcpy(outdata + out_size - OBFS_HMAC_SHA1_LEN, hash, OBFS_HMAC_SHA1_LEN);
     return out_size;
 }
@@ -733,7 +738,7 @@ int auth_aes128_sha1_pack_auth_data(auth_simple_global_data *global, server_info
 
         char enc_key[16];
         int enc_key_len = base64_len + strlen(salt);
-        bytes_to_key_with_size(encrypt_key_base64, enc_key_len, (uint8_t*)enc_key, 16);
+        ss_bytes_to_key_with_size(encrypt_key_base64, enc_key_len, (uint8_t*)enc_key, 16);
         ss_aes_128_cbc(encrypt, encrypt_data, enc_key);
         memcpy(encrypt + 4, encrypt_data, 16);
         memcpy(encrypt, uid, 4);

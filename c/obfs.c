@@ -4,12 +4,8 @@
 #include "utils.h"
 #include "obfs.h"
 
-int rand_bytes(uint8_t *output, int len);
-#define OBFS_HMAC_SHA1_LEN 10
-
 #include "obfsutil.c"
 #include "crc32.c"
-#include "base64.c"
 #include "http_simple.c"
 #include "tls1.2_ticket.c"
 #include "verify.c"
@@ -172,7 +168,6 @@ obfs_class * new_obfs_class(char *plugin_name)
 
         return plugin;
     }
-    LOGE("Load obfs '%s' failed", plugin_name);
     return NULL;
 }
 

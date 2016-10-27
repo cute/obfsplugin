@@ -1,4 +1,5 @@
-
+#include <stdlib.h>
+#include <time.h>
 #include "tls1.2_ticket.h"
 
 typedef struct tls12_ticket_auth_global_data {
